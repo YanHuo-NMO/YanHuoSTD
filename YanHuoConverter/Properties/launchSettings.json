@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "YanHuoConverter": {
+      "commandName": "Project",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}
