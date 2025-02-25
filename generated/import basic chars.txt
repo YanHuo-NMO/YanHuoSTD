@@ -1,0 +1,45 @@
+import os
+import sys
+import fontforge
+
+def get_files(path, extensions):
+    files = []
+    for name in os.listdir(path):
+        fullname = os.path.join(path, name)
+        if os.path.isfile(fullname):
+            ext = os.path.splitext(name)[-1].lower()[1:]
+            if (ext == '') or (ext in extensions):
+                files.append([fullname, name])
+    return files
+
+imgsPath = "xxxx/basic_glyphs";
+
+imgs = os.listdir(imgsPath);
+
+font = fontforge.activeFont();
+
+i = 0;
+
+svg_files = get_files(imgsPath, ['svg'])
+
+for svg_file in svg_files:
+    fullname, filename = svg_file;
+    char = filename[:-4];
+    fontforge.logWarning(char);
+    decimal_unicode = int(char, 16);
+    fontforge.logWarning("imgName: " + fullname);
+    glyph = font.createChar(decimal_unicode);
+    glyph.width = 1000;
+    layer = glyph.foreground;
+    if layer.isEmpty():
+        try:
+            glyph.importOutlines(fullname);
+        except:
+            fontforge.logWarning(fullname + "FAILED!");
+            continue;
+        else:
+            glyph.autoTrace();
+            glyph.simplify();
+    else:
+        fontforge.logWarning(svg_file + " is not empty");
+

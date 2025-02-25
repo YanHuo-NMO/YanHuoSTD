@@ -1,0 +1,45 @@
+import os
+import sys
+import fontforge
+
+def get_files(path, extensions):
+    files = []
+    for name in os.listdir(path):
+        fullname = os.path.join(path, name)
+        if os.path.isfile(fullname):
+            ext = os.path.splitext(name)[-1].lower()[1:]
+            if (ext == '') or (ext in extensions):
+                files.append(fullname)
+    return files
+
+imgsPath = "C:/Users/TylerTrue/test";
+
+imgs = os.listdir(imgsPath);
+
+font = fontforge.activeFont();
+
+i = 0;
+
+svg_files = get_files(imgsPath, ['svg'])
+
+for svg_file in svg_files:
+    char = os.path.splitext(svg_file)[0][-1];
+    fontforge.logWarning(char);
+    decimal_unicode = int(char, 10) + 48;
+    hex_unicode = "uni" + hex(decimal_unicode)[2:].zfill(4);
+    fontforge.logWarning("imgName: " + svg_file);
+    glyph = font.createChar(decimal_unicode);
+    glyph.width = 1000;
+    layer = glyph.foreground;
+    if layer.isEmpty():
+        try:
+            glyph.importOutlines(svg_file);
+        except:
+            fontforge.logWarning(svg_file + "FAILED!");
+            continue;
+        else:
+            glyph.autoTrace();
+            glyph.simplify();
+    else:
+        fontforge.logWarning(svg_file + " is not empty");
+
