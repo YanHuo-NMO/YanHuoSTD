@@ -14,7 +14,11 @@ public partial class MainWindow : Window {
 	public MainWindow() {
 		InitializeComponent();
 
+#if DEBUG
 		string fontpath = Path.Combine(Environment.CurrentDirectory, "../publish/YanHuoSTD.ttf");
+#else
+		string fontpath = Path.Combine(Environment.CurrentDirectory, "YanHuoSTD.ttf");
+#endif
 		m_font = new FontFamily(new Uri(fontpath), "./#YanHuo STD");
 		if (m_font == null)
 			throw new Exception();
