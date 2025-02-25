@@ -18,7 +18,28 @@ yh_glyph get_glyph(int offsetx, int offsety, cv::Mat& image) {
 
 			uchar clr = image.at<uchar>(tp);
 
-			if (clr < 128) {
+			if (clr < 16) {
+				res |= f;
+			}
+			f <<= 1;
+		}
+	}
+	return res;
+}
+
+yh_glyph get_glyph3(int offsetx, int offsety, cv::Mat& image) {
+	offsetx = 1 + offsetx * 4;
+	offsety = 1 + offsety * 8;
+
+	yh_glyph res = 0;
+	yh_glyph f = 1;
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 7; ++j) {
+			cv::Point tp(offsetx + i, offsety + j);
+
+			cv::Vec3b clr = image.at<cv::Vec3b>(tp);
+
+			if (clr[1] < 16) {
 				res |= f;
 			}
 			f <<= 1;
@@ -133,6 +154,33 @@ void GlyphEnum::genTo(const fs::path& dir) {
 			bucket.insert(code);
 
 			cv::imwrite((dir / std::format("{0:04X}.bmp", code + off, i.first.code, j.first.code)).string(), im);
+		}
+	}
+}
+
+void GlyphEnum::genSymbol(const fs::path& filepath, const fs::path& dir) {
+	if (!fs::exists(filepath) || !fs::is_regular_file(filepath))
+		return;
+	if (!fs::exists(dir)) {
+		fs::create_directory(dir);
+	}
+	if (!fs::is_directory(dir))
+		return;
+
+	cv::Mat im = cv::imread(filepath.string(), cv::ImreadModes::IMREAD_UNCHANGED);
+	int cnt = 0;
+
+	yh_glyph symbol;
+	for (int i = 0; i < 14; ++i) {
+		for (int j = 0; j < 16; ++j) {
+			symbol = get_glyph3(j, i, im);
+
+			if (symbol == 0)
+				continue;
+
+			auto im2 = gen_glyph(symbol);
+
+			cv::imwrite((dir / std::format("{0}.bmp", cnt++)).string(), im2);
 		}
 	}
 }

@@ -10,7 +10,23 @@
 namespace fs = std::filesystem;
 std::vector<std::string> files;
 
+void symbols() {
+	int cnt = 13;
+
+	for (int i = 0; i < cnt; ++i) {
+		fs::path s(std::to_string(i));
+		fs::path p(s);
+		s.replace_extension(".bmp");
+		p.replace_extension(".svg");
+
+		system(("potrace -s \"../basic_symbols_bmp\\" + s.string() + "\" -o \"../basic_symbols\\" + p.string() + "\"").c_str());
+	}
+}
+
 int main() {
+	symbols();
+	return 0;
+
 	std::cout << "Hello World!\n";
 
 	files.reserve(2048);
