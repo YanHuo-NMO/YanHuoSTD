@@ -37,6 +37,7 @@ public partial class MainWindow : Window {
 		for (int i = 0, n = str.Length; i < n; i++) {
 			lastIsSpace = i > 0 && str[i - 1] == ' ';
 			char curch = str[i];
+			curch = char.IsLetter(curch) ? char.ToUpper(curch) : curch;
 			char[] curs = [curch];
 
 			switch (curch) {
@@ -49,8 +50,8 @@ public partial class MainWindow : Window {
 				if (!Enum.TryParse(typeof(VowelEnum), curs, out var vob) || vob is not VowelEnum v)
 					break;
 				//if (yhchar.Empty()) {
-					//yhchar.SetConsonant(ConsoEnum.X);
-					//yhchar.SetModifier(ModifEnum.minus);
+				//	yhchar.SetConsonant(ConsoEnum.X);
+				//	yhchar.SetModifier(ModifEnum.minus);
 				//}
 				if (yhchar.GetVowel() == 0) {
 					yhchar.SetVowel1(v);
