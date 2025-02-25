@@ -39,7 +39,7 @@ public partial class MainWindow : Window {
 			char curch = str[i];
 			char[] curs = [curch];
 
-			switch (curch) {
+			switch (char.IsLetter(curch) ? char.ToUpper(curch) : curch) {
 			case 'I':
 			case 'E':
 			case 'U':
