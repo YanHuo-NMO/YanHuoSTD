@@ -16,6 +16,8 @@ public:
 	void readBasic(const fs::path& filepath);
 	void genTo(const fs::path& dir);
 
+	void genSymbol(const fs::path& filepath, const fs::path& dir);
+
 private:
 	vector<pair<yhchar, yh_glyph>> m_consonants;
 	vector<pair<yhchar, yh_glyph>> m_vowels;

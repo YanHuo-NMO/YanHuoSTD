@@ -6,6 +6,7 @@
 
 int main() {
 	GlyphEnum enumer;
-	enumer.readBasic("../basic.bmp");
-	enumer.genTo("../basic_glyphs_bmp");
+	//enumer.readBasic("../basic.bmp");
+	//enumer.genTo("../basic_glyphs_bmp");
+	enumer.genSymbol("../symbols.bmp", "../basic_symbols_bmp");
 }
